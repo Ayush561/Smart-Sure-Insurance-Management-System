@@ -180,7 +180,7 @@ services:
     image: smartsure-policy-service
     container_name: policy-service
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8003/actuator/health || exit 1"]
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8004/actuator/health || exit 1"]
       interval: 20s
       timeout: 10s
       retries: 10
@@ -216,7 +216,7 @@ services:
     image: smartsure-payment-service
     container_name: payment-service
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8004/actuator/health || exit 1"]
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8085/actuator/health || exit 1"]
       interval: 20s
       timeout: 10s
       retries: 10
@@ -237,6 +237,7 @@ services:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_DATA_REDIS_HOST=redis
       - SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED=false
+      - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET}
     depends_on:
       - postgres-db
       - rabbitmq
@@ -249,7 +250,7 @@ services:
     image: smartsure-claims-service
     container_name: claims-service
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8001/actuator/health || exit 1"]
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8003/actuator/health || exit 1"]
       interval: 20s
       timeout: 10s
       retries: 10
