@@ -87,6 +87,8 @@ services:
       - "9999:9999"
     environment:
       - SERVER_PORT=9999
+      - SPRING_APPLICATION_NAME=config-server
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_PROFILES_ACTIVE=native
       - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=classpath:/configs
@@ -138,6 +140,7 @@ services:
       - smartsure-network
     environment: &common-env
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:9999
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/microservices
       - SPRING_DATASOURCE_USERNAME=postgres
