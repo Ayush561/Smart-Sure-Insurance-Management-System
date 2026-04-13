@@ -118,6 +118,7 @@ services:
       - "8888:8888"
     environment:
       - SERVER_PORT=8888
+      - SPRING_APPLICATION_NAME=api-gateway
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:9999
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_CONFIG_CLIENT_CONFIGSERVERCONFIGDATALOADER=ERROR
@@ -141,15 +142,16 @@ services:
     networks:
       - smartsure-network
     environment: &common-env
-      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:9999
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/microservices
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=root
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_DATA_REDIS_HOST=redis
-      - SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED=false
+      SPRING_CONFIG_IMPORT: "optional:configserver:http://config-server:9999"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:8761/eureka/"
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: "http://eureka-server:8761/eureka/"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres-db:5432/microservices"
+      SPRING_DATASOURCE_USERNAME: "postgres"
+      SPRING_DATASOURCE_PASSWORD: "root"
+      SPRING_RABBITMQ_HOST: "rabbitmq"
+      SPRING_DATA_REDIS_HOST: "redis"
+      SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED: "false"
+      SPRING_APPLICATION_NAME: "auth-service"
     depends_on:
       - postgres-db
       - rabbitmq
@@ -165,7 +167,9 @@ services:
     restart: always
     networks:
       - smartsure-network
-    environment: *common-env
+    environment:
+      <<: *common-env
+      SPRING_APPLICATION_NAME: "policy-service"
     depends_on:
       postgres-db:
         condition: service_healthy
@@ -183,7 +187,9 @@ services:
     restart: always
     networks:
       - smartsure-network
-    environment: *common-env
+    environment:
+      <<: *common-env
+      SPRING_APPLICATION_NAME: "payment-service"
     depends_on:
       - postgres-db
       - rabbitmq
@@ -198,7 +204,9 @@ services:
     restart: always
     networks:
       - smartsure-network
-    environment: *common-env
+    environment:
+      <<: *common-env
+      SPRING_APPLICATION_NAME: "claims-service"
     depends_on:
       - postgres-db
       - rabbitmq
@@ -214,7 +222,9 @@ services:
     restart: always
     networks:
       - smartsure-network
-    environment: *common-env
+    environment:
+      <<: *common-env
+      SPRING_APPLICATION_NAME: "admin-service"
     ports:
       - "8005:8005"
     depends_on:
