@@ -150,6 +150,7 @@ services:
     networks:
       - smartsure-network
     environment:
+      - SERVER_PORT=8002
       - SPRING_APPLICATION_NAME=auth-service
       - EUREKA_INSTANCE_APPNAME=auth-service
       - JAVA_TOOL_OPTIONS=-Dspring.application.name=auth-service
@@ -191,6 +192,7 @@ services:
     networks:
       - smartsure-network
     environment:
+      - SERVER_PORT=8004
       - SPRING_APPLICATION_NAME=policy-service
       - EUREKA_INSTANCE_APPNAME=policy-service
       - JAVA_TOOL_OPTIONS=-Dspring.application.name=policy-service
@@ -227,6 +229,7 @@ services:
     networks:
       - smartsure-network
     environment:
+      - SERVER_PORT=8085
       - SPRING_APPLICATION_NAME=payment-service
       - EUREKA_INSTANCE_APPNAME=payment-service
       - JAVA_TOOL_OPTIONS=-Dspring.application.name=payment-service
@@ -261,6 +264,7 @@ services:
     networks:
       - smartsure-network
     environment:
+      - SERVER_PORT=8003
       - SPRING_APPLICATION_NAME=claims-service
       - EUREKA_INSTANCE_APPNAME=claims-service
       - JAVA_TOOL_OPTIONS=-Dspring.application.name=claims-service
@@ -299,6 +303,7 @@ services:
     networks:
       - smartsure-network
     environment:
+      - SERVER_PORT=8005
       - SPRING_APPLICATION_NAME=admin-service
       - EUREKA_INSTANCE_APPNAME=admin-service
       - JAVA_TOOL_OPTIONS=-Dspring.application.name=admin-service
