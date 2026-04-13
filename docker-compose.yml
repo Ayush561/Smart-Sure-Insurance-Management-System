@@ -138,25 +138,40 @@ services:
       dockerfile: auth-service/Dockerfile
     image: smartsure-auth-service
     container_name: auth-service
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8002/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+      start_period: 40s
     restart: always
     networks:
       - smartsure-network
-    environment: &common-env
-      SPRING_CONFIG_IMPORT: "optional:configserver:http://config-server:9999"
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:8761/eureka/"
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: "http://eureka-server:8761/eureka/"
-      SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres-db:5432/microservices"
-      SPRING_DATASOURCE_USERNAME: "postgres"
-      SPRING_DATASOURCE_PASSWORD: "root"
-      SPRING_RABBITMQ_HOST: "rabbitmq"
-      SPRING_DATA_REDIS_HOST: "redis"
-      SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED: "false"
-      SPRING_APPLICATION_NAME: "auth-service"
+    environment:
+      - SPRING_APPLICATION_NAME=auth-service
+      - EUREKA_INSTANCE_APPNAME=auth-service
+      - JAVA_TOOL_OPTIONS=-Dspring.application.name=auth-service
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:9999
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/microservices
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED=false
+      - BREVO_API_KEY=${BREVO_API_KEY}
+      - GMAIL_APP_PASSWORD=${GMAIL_APP_PASSWORD}
+      - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET}
     depends_on:
-      - postgres-db
-      - rabbitmq
-      - config-server
-      - eureka-server
+      postgres-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
 
   policy-service:
     build:
@@ -164,12 +179,28 @@ services:
       dockerfile: policy-service/Dockerfile
     image: smartsure-policy-service
     container_name: policy-service
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8003/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+      start_period: 40s
     restart: always
     networks:
       - smartsure-network
     environment:
-      <<: *common-env
-      SPRING_APPLICATION_NAME: "policy-service"
+      - SPRING_APPLICATION_NAME=policy-service
+      - EUREKA_INSTANCE_APPNAME=policy-service
+      - JAVA_TOOL_OPTIONS=-Dspring.application.name=policy-service
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:9999
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/microservices
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED=false
     depends_on:
       postgres-db:
         condition: service_healthy
@@ -184,12 +215,28 @@ services:
       dockerfile: payment-service/Dockerfile
     image: smartsure-payment-service
     container_name: payment-service
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8004/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+      start_period: 40s
     restart: always
     networks:
       - smartsure-network
     environment:
-      <<: *common-env
-      SPRING_APPLICATION_NAME: "payment-service"
+      - SPRING_APPLICATION_NAME=payment-service
+      - EUREKA_INSTANCE_APPNAME=payment-service
+      - JAVA_TOOL_OPTIONS=-Dspring.application.name=payment-service
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:9999
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/microservices
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED=false
     depends_on:
       - postgres-db
       - rabbitmq
@@ -201,17 +248,37 @@ services:
       dockerfile: claims-service/Dockerfile
     image: smartsure-claims-service
     container_name: claims-service
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8001/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+      start_period: 40s
     restart: always
     networks:
       - smartsure-network
     environment:
-      <<: *common-env
-      SPRING_APPLICATION_NAME: "claims-service"
+      - SPRING_APPLICATION_NAME=claims-service
+      - EUREKA_INSTANCE_APPNAME=claims-service
+      - JAVA_TOOL_OPTIONS=-Dspring.application.name=claims-service
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:9999
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/microservices
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED=false
     depends_on:
-      - postgres-db
-      - rabbitmq
-      - config-server
-      - eureka-server
+      postgres-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
 
   admin-service:
     build:
@@ -219,12 +286,28 @@ services:
       dockerfile: admin-service/Dockerfile
     image: smartsure-admin-service
     container_name: admin-service
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8005/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+      start_period: 40s
     restart: always
     networks:
       - smartsure-network
     environment:
-      <<: *common-env
-      SPRING_APPLICATION_NAME: "admin-service"
+      - SPRING_APPLICATION_NAME=admin-service
+      - EUREKA_INSTANCE_APPNAME=admin-service
+      - JAVA_TOOL_OPTIONS=-Dspring.application.name=admin-service
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:9999
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/microservices
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED=false
     ports:
       - "8005:8005"
     depends_on:
