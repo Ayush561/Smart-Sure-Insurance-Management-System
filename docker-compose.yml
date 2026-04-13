@@ -92,6 +92,7 @@ services:
       - SPRING_APPLICATION_NAME=config-server
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - JAVA_TOOL_OPTIONS=-Dspring.application.name=config-server -Deureka.client.service-url.defaultZone=http://eureka-server:8761/eureka/
       - SPRING_PROFILES_ACTIVE=native
       - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=file:/app/configs
       - SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED=false
@@ -119,6 +120,7 @@ services:
     environment:
       - SERVER_PORT=8888
       - SPRING_APPLICATION_NAME=api-gateway
+      - JAVA_TOOL_OPTIONS=-Dspring.application.name=api-gateway -Deureka.client.service-url.defaultZone=http://eureka-server:8761/eureka/
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:9999
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_CONFIG_CLIENT_CONFIGSERVERCONFIGDATALOADER=ERROR
